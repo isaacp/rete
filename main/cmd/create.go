@@ -36,5 +36,28 @@ var createCmd = &cobra.Command{
 			}
 			fmt.Print("\n")
 		}
+		// find all connected
+		fmt.Println("Finding all connected for: " + nodes[0].Name())
+		visited := make(map[string]bool)
+		var printTree func(interfaces.INode, map[string]bool)
+		printTree = func(node interfaces.INode, visited map[string]bool) {
+			if visited[node.Name()] {
+				return
+			}
+			visited[node.Name()] = true
+			fmt.Println(node.Name())
+			for _, n := range node.Neighbors() {
+				printTree(n, visited)
+			}
+		}
+
+		printConnections := func(root interfaces.INode, visited map[string]bool) {
+			visited[root.Name()] = true
+			for _, node := range root.Neighbors() {
+				printTree(node, visited)
+			}
+		}
+
+		printConnections(nodes[2], visited)
 	},
 }
